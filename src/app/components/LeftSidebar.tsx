@@ -45,7 +45,7 @@ const NAVIGATION_ITEMS = [
 export default function LeftSidebar() {
   return (
     <section className="w-[23%] sticky top-0 xl:flex flex-col items-stretch h-screen hidden">
-            <div className="w-full h-full flex-col items-stretch space-y-4 mt-4">
+            <div className="flex flex-col items-stretch h-full space-y-4 mt-4">
               {NAVIGATION_ITEMS.map(item => 
                 <Link className="hover:bg-white/10 transition duration-200 flex items-center justify-start text-xl w-fit space-x-6 rounded-3xl py-2 px-4" href={`/${item.title.toLowerCase}`} key={item.title}>
                   <div>
@@ -56,7 +56,7 @@ export default function LeftSidebar() {
                   </div>
                 </Link>
               )}
-              <button className="w-full rounded-full bg-primary p-4 text-2xl hover:bg-primary/70 transition duration-100">
+              <button className="rounded-full bg-primary m-4 p-4 text-2xl hover:bg-primary/70 transition duration-100">
                 Tweet
               </button>
             </div>
