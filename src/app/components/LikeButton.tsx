@@ -1,54 +1,28 @@
-'use client';
-
-import React, { useTransition } from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { createClient } from '@/utils/supabase/client';
-import { likeTweet } from '@/utils/supabase/mutations';
-import { toast } from 'sonner';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 type LikeButtonProps = {
-  tweetId: string;
-  //   likesCount: number | null;
-  //   isUserHasLiked: boolean;
+  likesCount: number | null;
+  isUserHasLiked: boolean;
+  handleLike: ()=>void
 };
 
 const LikeButton = ({
-  tweetId,
-}: //   likesCount,
-//   isUserHasLiked,
-LikeButtonProps) => {
-  const [isLikePending, startTransition] = useTransition();
-  const supabase = createClient();
-
-  const handleLike = async () => {
-    try {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data?.user) {
-        return toast('Please login to like a tweet');
-      }
-
-      startTransition(async () => {
-        try {
-          const response = await likeTweet({
-            tweetId,
-            userId: data.user.id,
-          });
-          console.log(response);
-        } catch {
-          toast.error('Failed to like the tweet');
-        }
-      });
-    } catch {
-      toast.error('Authentication failed');
-    }
-  };
+  likesCount,
+  isUserHasLiked,
+  handleLike,
+}: LikeButtonProps) => {
 
   return (
     <button
-      disabled={isLikePending}
       onClick={handleLike}
-    >
-      <AiOutlineHeart />
+      className="flex items-center space-x-1 p-3 rounded-full hover:bg-rose-950/60 hover:text-red-500 transition duration-200 cursor-pointer">
+      {isUserHasLiked ? (
+        <AiFillHeart className="w-4 h-3.75 text-red-600" />
+      ) : (
+        <AiOutlineHeart className="w-4 h-3.75" />
+      )}
+
+      <span>{likesCount ?? 0}</span>
     </button>
   );
 };

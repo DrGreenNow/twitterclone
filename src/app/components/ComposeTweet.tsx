@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { submitTweet } from '@/utils/supabase/queries';
+import { submitTweet } from '@/lib/supabase/queries';
 import { toast } from 'sonner';
 
 const ComposeTweet = () => {
@@ -12,14 +12,11 @@ const ComposeTweet = () => {
     const formData = new FormData(event.currentTarget);
 
     try {
-      const res = await submitTweet(formData);
-      if (res?.error) {
-        return toast.error(res.error.message);
-      }
+      await submitTweet(formData);
       toast.success('Tweet sent successfully!');
       formRef.current?.reset();
     } catch (error) {
-      console.log(error);
+      console.log(error, 'handle submit tweet error');
     }
   };
 
@@ -33,14 +30,15 @@ const ComposeTweet = () => {
           type="text"
           name="tweet"
           placeholder="What's happening?"
-          className="w-full h-full placeholder:text-gray-600 bg-transparent outline-none border-none p-4"></input>
+          className="w-full h-full placeholder:text-gray-600 bg-transparent outline-none border-none p-4"
+        />
       </div>
-      <div className="w-full justify-between items-center flex">
-        <div className="w-full max-w-[100px]">
+      <div className="w-full justify-end items-center flex">
+        <div className="w-full max-w-20">
           <button
             type="submit"
-            className="w-full rounded-full bg-primary px-4 py-2 text-lg hover:bg-primary/70 transition duration-100 font-bold">
-            Tweet
+            className="w-full h-9 rounded-full bg-gray-500 px-4 hover:bg-primary/70 transition duration-100 font-bold text-black">
+            Post
           </button>
         </div>
       </div>

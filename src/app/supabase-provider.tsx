@@ -1,9 +1,9 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/utils/supabase/types';
+import type { Database } from '@/lib/supabase/types';
 import { Dialog, DialogContent } from './components/ui/dialog';
 import { Input } from './components/ui/input';
 import { Button } from './components/ui/button';
@@ -15,7 +15,7 @@ type SupabaseContextType = {
   supabase: SupabaseClient<Database>;
 };
 
-export const Context = createContext<SupabaseContextType | undefined>(
+export const MainContext = createContext<SupabaseContextType | undefined>(
   undefined
 );
 
@@ -40,15 +40,11 @@ export default function SupabaseProvider({
 
     supabase.auth.getSession().then((res) => {
       if (!res.data.session) {
+        // TODO. check. it is not working
         // setIsOpen(true);
         console.log(res, 'session');
         return;
       }
-      // setUser(res.data.session.user);
-    });
-
-    supabase.auth.getUser().then((res) => {
-      console.log(res, 'user');
     });
 
     return () => {
@@ -57,7 +53,8 @@ export default function SupabaseProvider({
   }, [router, supabase]);
 
   return (
-    <Context.Provider value={{ supabase }}>
+    <MainContext.Provider value={{ supabase }}>
+      {/* TODO do we need provider here? */}
       <>
         <Toaster />
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -118,12 +115,12 @@ export default function SupabaseProvider({
         </Dialog>
         {children}
       </>
-    </Context.Provider>
+    </MainContext.Provider>
   );
 }
 
 export const useSupabase = () => {
-  const context = useContext(Context);
+  const context = useContext(MainContext);
 
   if (context === undefined) {
     throw new Error('useSupabase must be used inside SupabaseProvider');

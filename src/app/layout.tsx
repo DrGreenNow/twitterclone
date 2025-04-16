@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
       <div className="w-full h-full flex justify-center items-center relative bg-black text-white">
-        <div className="xl:max-w-[70vw] w-full h-full flex relative">
+        <div className="w-full h-full flex relative justify-center">
           <LeftSidebar />
           <SupabaseProvider>{children}</SupabaseProvider>
           <RightSection />
